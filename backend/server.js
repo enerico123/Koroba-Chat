@@ -2,6 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const db = require('./database')
 const { register, login } = require('./auth/auth')
+const authMiddleware = require('./auth/middleware')
+const usersRoutes = require('./routes/users')
 
 const app = express()
 const PORT = 3000
@@ -19,6 +21,8 @@ app.get('/', (req, res) => {
 app.post('/auth/register', register)
 app.post('/auth/login', login)
 
+// Routes users 
+app.use('/users', authMiddleware, usersRoutes)
 
 // Lancer le serveur
 app.listen(PORT, () => {
