@@ -6,6 +6,8 @@ const authMiddleware = require('./auth/middleware')
 const usersRoutes = require('./routes/users')
 const conversationsRoutes = require('./routes/conversations')
 const messagesRoutes = require('./routes/messages')
+const http = require('http')
+const initSocket = require('./socket')
 
 const app = express()
 const PORT = 3000
@@ -30,7 +32,10 @@ app.use('/conversations',authMiddleware,conversationsRoutes)
 // Routes messages
 app.use('/messages',authMiddleware,messagesRoutes)
 
-// Lancer le serveur
-app.listen(PORT, () => {
+// Lancer le serveur avec WebSocket 
+const server = http.createServer(app)
+initSocket(server)
+
+server.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`)
 })
