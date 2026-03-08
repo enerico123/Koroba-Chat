@@ -5,6 +5,7 @@ const { register, login } = require('./auth/auth')
 const authMiddleware = require('./auth/middleware')
 const usersRoutes = require('./routes/users')
 const conversationsRoutes = require('./routes/conversations')
+const messagesRoutes = require('./routes/messages')
 
 const app = express()
 const PORT = 3000
@@ -24,8 +25,10 @@ app.post('/auth/login', login)
 
 // Routes users 
 app.use('/users', authMiddleware, usersRoutes)
-// Routes messages 
+// Routes conversation 
 app.use('/conversations',authMiddleware,conversationsRoutes)
+// Routes messages
+app.use('/messages',authMiddleware,messagesRoutes)
 
 // Lancer le serveur
 app.listen(PORT, () => {
