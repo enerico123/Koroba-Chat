@@ -1,10 +1,86 @@
-function Chat({ token, userId }) {
-  return (
-    <div>
-      <h1>Bienvenue ! 🎉</h1>
-      <p>UserId : {userId}</p>
-    </div>
-  )
-}
+import { useEffect, useState, useRef } from "react"
+import { io } from 'socket.io-client'
+
+const Chat = ({token, userId, conversationId}) => {
+
+  const [messages, setMessages] = useState([])
+  const [contenu, setContenu] = useState('')
+  const socket = useRef(null)
+
+  // charge les messags quand convId change
+  useEffect(() => {
+    if (!conversationId) return
+    const chargerMessages = async () => {
+            const response = await fetch(`/api/messages/${conversationId}`, {
+            headers: { 
+                'Authorization': `Bearer ${token}` 
+            }
+            })
+            const data = await response.json()
+            setMessages(data)
+        }
+        chargerMessages()
+  },[conversationId])
+
+
+
+  useEffect(() => {
+    // connexion perma 
+    socket.current = io('http://localhost:3000', { auth: { token } })
+
+
+    // ecouter les messages
+    socket.current.on('new_message', (message) => {
+      setMessages(prev => [...prev, message])
+    })
+
+    return () => socket.current.disconnect()
+  }, [])  // ← une seule fois
+
+  // Rejoindre la room — quand conversationId change
+  useEffect(() => {
+    if (!conversationId || !socket.current) return
+    socket.current.emit('join_conversation', conversationId)
+  }, [conversationId])  // ← quand conv change
+
+
+
+
+
+    // fonction pour ENVOYER son message 
+    const envoyerMessage = () => {
+    if (!contenu) return  
+
+    socket.current.emit('send_message', {
+      conversationId,
+      content: contenu
+    })
+
+
+
+
+    setContenu('')  // vider l'input après envoi
+  }
+
+    return (
+      <>
+      {/* liste des messages  */}
+      
+      {messages.map((mess) => (
+        <div key={mess.id}>
+          {mess.content}
+        </div>
+      ))}
+
+      {/* input pour ecrire un message  */}
+      <input 
+        type="text" 
+        value={contenu}
+        onChange={(e) => setContenu(e.target.value)}
+        placeholder="Écrire un message..."/>
+      <button onClick={envoyerMessage}>Envoyer</button>
+      </>
+    )
+  }
 
 export default Chat
