@@ -6,10 +6,11 @@ import Sidebar from './components/Sidebar'
 import './App.css'
 
 function App() {
-  const [token, setToken] = useState(null)
-  const [userId, setUserId] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem('token'))
+const [userId, setUserId] = useState(localStorage.getItem('userId'))
   const [conversationId, setConversationId] = useState(null)
   const [isRegister, setIsRegister] = useState(false)
+  
 
   if (!token) {
     
@@ -17,6 +18,8 @@ function App() {
       return <Register onRegister={(token, userId) => {
       setToken(token)
       setUserId(userId)
+      localStorage.setItem('token', token)
+      localStorage.setItem('userId', userId)
     }}
     onSwitch={() => setIsRegister(false)} />}
 
@@ -24,6 +27,8 @@ function App() {
       return <Login onLogin={(token, userId) => {
       setToken(token)
       setUserId(userId)
+      localStorage.setItem('token', token)
+      localStorage.setItem('userId', userId)
     }}
     onSwitch={() => setIsRegister(true)}  />}
   }
