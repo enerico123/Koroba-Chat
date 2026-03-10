@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Sidebar.css'
 
-const Sidebar = ({token, onSelectConversation}) => {
+const Sidebar = ({token, onSelectConversation,username, onDeconnexion}) => {
 
     const [conversations, setConversations] = useState([])
     const [newNameConv,setNewNameConv] = useState('')
@@ -42,6 +42,10 @@ const Sidebar = ({token, onSelectConversation}) => {
 
     return (
         <>  
+            <div className='info-compte'>
+                <span className="sidebar-username"> {username}</span> {/* image user par la suite */} 
+                 <button onClick={onDeconnexion}></button> {/* image deconnecter par la suite  */}
+            </div>
             <div className='creation-groups'>
                 <input 
                 placeholder='Nom du groupe'
