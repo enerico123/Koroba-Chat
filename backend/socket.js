@@ -47,7 +47,7 @@ const initSocket = (server) => {
           io.to(conversationId).emit('new_message', {
             id: this.lastID,
             conversationId,
-            senderId,
+            sender_id : senderId,
             content,
             created_at: new Date()
           })

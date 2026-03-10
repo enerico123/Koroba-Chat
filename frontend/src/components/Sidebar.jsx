@@ -58,19 +58,6 @@ const Sidebar = ({token, onSelectConversation}) => {
                     {conv.name}
                 </div>
 
-                {/* A SUPPRIMER  */}
-
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
-                <div className='message'>Groupe</div>
                 </>
             ))}
             </div>
