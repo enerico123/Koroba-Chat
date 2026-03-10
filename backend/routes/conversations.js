@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
         )
       })
 
-      res.status(201).json({ conversationId, message: 'Conversation créée ✅' })
+      res.status(201).json({ id: conversationId, name, is_group, created_by: userId })
     }
   )
 })
