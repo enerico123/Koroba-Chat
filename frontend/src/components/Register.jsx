@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './Register.css'
 
 function Register({ onRegister,onSwitch }) {
   const [email, setEmail] = useState('')
@@ -29,33 +30,39 @@ function Register({ onRegister,onSwitch }) {
   }
 
   return (
-    <div>
-      <h1>Koroba Chat 💬</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      <input
-        type="text"
-        placeholder="Nom d'utilisateur"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+    <div className='auth-container'>
+      <h1 className='title'>Koroba Chat</h1>
+      <div className='entree'>
+        <input
+          className='input-mail'
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          className='input-username'
+          type="text"
+          placeholder="Nom d'utilisateur"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+
+        <input
+          className='input-password'
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
       {error && <p>{error}</p>}
-      <button onClick={handleRegister}>S'identifier</button>
-      <button onClick={() => onSwitch()}>Pas de compte ? S'inscrire</button>
+      <div className='bouttons'>
+        <button className='btn-main' onClick={handleRegister}>S'identifier</button>
+      <button className='btn-switch' onClick={() => onSwitch()}>Pas de compte ? S'inscrire</button>
+      </div>
+      
     </div>
   )
 }
