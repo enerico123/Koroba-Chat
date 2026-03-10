@@ -1,16 +1,17 @@
 import { useState } from 'react'
 
-function Login({ onLogin,onSwitch }) {
+function Register({ onRegister,onSwitch }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
   const [error, setError] = useState(null)
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password,username })
       })
 
       const data = await response.json()
@@ -20,7 +21,7 @@ function Login({ onLogin,onSwitch }) {
         return
       }
 
-      onLogin(data.token, data.userId)
+      onRegister(data.token, data.userId)
 
     } catch (err) {
       setError('Erreur de connexion')
@@ -39,18 +40,24 @@ function Login({ onLogin,onSwitch }) {
       <br></br>
       <br></br>
       <input
+        type="text"
+        placeholder="Nom d'utilisateur"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <br></br>
+      <br></br>
+      <input
         type="password"
         placeholder="Mot de passe"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <br></br>
-      <br></br>
       {error && <p>{error}</p>}
-      <button onClick={handleLogin}>Se connecter</button>
+      <button onClick={handleRegister}>S'identifier</button>
       <button onClick={() => onSwitch()}>Pas de compte ? S'inscrire</button>
     </div>
   )
 }
 
-export default Login
+export default Register
