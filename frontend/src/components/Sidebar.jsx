@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LogOut, User } from 'lucide-react'
 import './Sidebar.css'
 
 const Sidebar = ({token, onSelectConversation,username, onDeconnexion}) => {
@@ -43,8 +44,8 @@ const Sidebar = ({token, onSelectConversation,username, onDeconnexion}) => {
     return (
         <>  
             <div className='info-compte'>
-                <span className="sidebar-username"> {username}</span> {/* image user par la suite */} 
-                 <button onClick={onDeconnexion}></button> {/* image deconnecter par la suite  */}
+                <span className="sidebar-username"><User size={16} /> {username}</span> {/* image user par la suite */} 
+                 <button onClick={onDeconnexion}><LogOut size={16} /></button> {/* image deconnecter par la suite  */}
             </div>
             <div className='creation-groups'>
                 <input 
