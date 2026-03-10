@@ -31,10 +31,14 @@ function App() {
   
 
   return (
-    <div>
-      <Sidebar token={token} onSelectConversation={(id) => setConversationId(id)}/>
-
-      <Chat token={token} userId={userId} conversationId={conversationId}/>
+    <div className="app-container">
+      <div className='sidebar'>
+        <Sidebar token={token} onSelectConversation={(id) => setConversationId(id)}/>
+      </div>
+      
+      <div className='chat'>
+        <Chat token={token} userId={userId} conversationId={conversationId}/>
+      </div>
     </div>
   ) 
   

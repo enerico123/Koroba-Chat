@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './Sidebar.css'
 
 const Sidebar = ({token, onSelectConversation}) => {
 
@@ -40,21 +41,39 @@ const Sidebar = ({token, onSelectConversation}) => {
     }
 
     return (
-        <>
-            <input 
-            placeholder='Nom du groupe'
-            value={newNameConv}
-            onChange={(e) => setNewNameConv(e.target.value)}
-            type="text"/>
-            {/* onClick={envoyerMessage} quand fonction sera créé */}
-            <button onClick={creerGroupe}>Créer</button>
+        <>  
+            <div className='creation-groups'>
+                <input 
+                placeholder='Nom du groupe'
+                value={newNameConv}
+                onChange={(e) => setNewNameConv(e.target.value)}
+                type="text"/>
 
+                <button onClick={creerGroupe}>Créer</button>
+            </div>
+            <div className='liste-groups'>
             {conversations.map((conv) => (
-                <div key={conv.id} onClick={() => onSelectConversation(conv.id)}>
+                <>
+                <div className='message' key={conv.id} onClick={() => onSelectConversation(conv.id)}>
                     {conv.name}
                 </div>
-            ))}
 
+                {/* A SUPPRIMER  */}
+
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                <div className='message'>Groupe</div>
+                </>
+            ))}
+            </div>
             
         </>
     );

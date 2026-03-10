@@ -11,6 +11,11 @@ body {
 }
 
 .app-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 500px 1fr;
   height: 100vh;
+}
+
+.sidebar {
+    background-color: gray;
 }
