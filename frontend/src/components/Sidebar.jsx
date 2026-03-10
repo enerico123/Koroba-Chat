@@ -53,12 +53,9 @@ const Sidebar = ({token, onSelectConversation}) => {
             </div>
             <div className='liste-groups'>
             {conversations.map((conv) => (
-                <>
-                <div className='message' key={conv.id} onClick={() => onSelectConversation(conv.id)}>
+                <div className='message' key={conv.id} onClick={() => onSelectConversation(conv)}>
                     {conv.name}
                 </div>
-
-                </>
             ))}
             </div>
             

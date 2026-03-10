@@ -7,10 +7,11 @@ import './App.css'
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'))
-const [userId, setUserId] = useState(localStorage.getItem('userId'))
-  const [conversationId, setConversationId] = useState(null)
+  const [userId, setUserId] = useState(localStorage.getItem('userId'))
+  const [conversation, setConversation] = useState(null)
   const [isRegister, setIsRegister] = useState(false)
   
+  // console.log('conversation:', conversation)
 
   if (!token) {
     
@@ -38,11 +39,15 @@ const [userId, setUserId] = useState(localStorage.getItem('userId'))
   return (
     <div className="app-container">
       <div className='sidebar'>
-        <Sidebar token={token} onSelectConversation={(id) => setConversationId(id)}/>
+        <Sidebar token={token} onSelectConversation={(conv) => setConversation(conv)}/>
       </div>
       
       <div className='chat'>
-        <Chat token={token} userId={userId} conversationId={conversationId}/>
+        <Chat 
+        token={token} 
+        userId={userId} 
+        conversationId={conversation?.id} 
+        nomConversation={conversation?.name}/>
       </div>
     </div>
   ) 

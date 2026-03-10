@@ -42,4 +42,19 @@ router.post('/', (req, res) => {
   )
 })
 
+// POST /conversations/:id/members -> ajouter un membre
+router.post('/:id/members', (req, res) => {
+  const conversationId = req.params.id
+  const { userId } = req.body
+
+  db.run(
+    'INSERT INTO conversation_members (conversation_id, user_id) VALUES (?, ?)',
+    [conversationId, userId],
+    function(err) {
+      if (err) return res.status(500).json({ error: 'Erreur serveur' })
+      res.status(201).json({ message: 'Membre ajouté ✅' })
+    }
+  )
+})
+
 module.exports = router
