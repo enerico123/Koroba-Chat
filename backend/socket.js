@@ -48,6 +48,7 @@ const initSocket = (server) => {
             id: this.lastID,
             conversationId,
             sender_id : senderId,
+            username: socket.user.username,
             content,
             created_at: new Date()
           })

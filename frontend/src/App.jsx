@@ -6,10 +6,12 @@ import Sidebar from './components/Sidebar'
 import './App.css'
 
 function App() {
-  const [token, setToken] = useState(null)
-  const [userId, setUserId] = useState(null)
-  const [conversationId, setConversationId] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem('token'))
+  const [userId, setUserId] = useState(localStorage.getItem('userId'))
+  const [conversation, setConversation] = useState(null)
   const [isRegister, setIsRegister] = useState(false)
+  
+  // console.log('conversation:', conversation)
 
   if (!token) {
     
@@ -17,6 +19,8 @@ function App() {
       return <Register onRegister={(token, userId) => {
       setToken(token)
       setUserId(userId)
+      localStorage.setItem('token', token)
+      localStorage.setItem('userId', userId)
     }}
     onSwitch={() => setIsRegister(false)} />}
 
@@ -24,6 +28,8 @@ function App() {
       return <Login onLogin={(token, userId) => {
       setToken(token)
       setUserId(userId)
+      localStorage.setItem('token', token)
+      localStorage.setItem('userId', userId)
     }}
     onSwitch={() => setIsRegister(true)}  />}
   }
@@ -33,11 +39,15 @@ function App() {
   return (
     <div className="app-container">
       <div className='sidebar'>
-        <Sidebar token={token} onSelectConversation={(id) => setConversationId(id)}/>
+        <Sidebar token={token} onSelectConversation={(conv) => setConversation(conv)}/>
       </div>
       
       <div className='chat'>
-        <Chat token={token} userId={userId} conversationId={conversationId}/>
+        <Chat 
+        token={token} 
+        userId={userId} 
+        conversationId={conversation?.id} 
+        nomConversation={conversation?.name}/>
       </div>
     </div>
   ) 

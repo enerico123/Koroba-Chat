@@ -3,11 +3,14 @@ import { io } from 'socket.io-client'
 import Message from "./Message"
 import './Chat.css'
 
-const Chat = ({token, userId, conversationId}) => {
+const Chat = ({token, userId, conversationId, nomConversation}) => {
 
   const [messages, setMessages] = useState([])
   const [contenu, setContenu] = useState('')
   const socket = useRef(null)
+  const messagesEndRef = useRef(null)
+
+  // console.log('conversationId:', conversationId)
 
   // charge les messags quand convId change
   useEffect(() => {
@@ -64,26 +67,45 @@ const Chat = ({token, userId, conversationId}) => {
     setContenu('')  // vider l'input après envoi
   }
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+    if(!conversationId){
+      return (
+        <>
+          <div className="sleep">Sleep...</div>
+        </>
+      )
+    } 
+
     return (
       <>
-      {/* liste des messages  */}
+         {/* TOPBAR : avec nom du groupe + bouton ajouter user au groupe   */}
+        <div className="chat-header">
+          <h2>{nomConversation}</h2>
+          <button>+ Ajouter</button>
+        </div>
 
-      <div className="liste-messages">
-      {messages.map((mess) => (
-        <Message key={mess.id} message={mess} userId={userId} />
-      ))}
-      </div>
+        {/* liste des messages  */}
 
-      {/* input pour ecrire un message  */}
-      <div className="input-message">
-      <input 
-        type="text" 
-        value={contenu}
-        onChange={(e) => setContenu(e.target.value)}
-        placeholder="Écrire un message..."/>
-      <button onClick={envoyerMessage}>Envoyer</button>
-      </div>
-      </>
+        <div className="liste-messages">
+        {messages.map((mess) => (
+          <Message key={mess.id} message={mess} userId={userId} />
+        ))}
+        <div ref={messagesEndRef} /> 
+        </div>
+
+        {/* input pour ecrire un message  */}
+        <div className="input-message">
+        <input 
+          type="text" 
+          value={contenu}
+          onChange={(e) => setContenu(e.target.value)}
+          placeholder="Écrire un message..."/>
+        <button onClick={envoyerMessage}>Envoyer</button>
+        </div>
+        </>
     )
   }
 

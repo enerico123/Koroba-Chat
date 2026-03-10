@@ -3,7 +3,7 @@
 .chat {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    
     height: 100vh;
     background-color: #0e0e0e;
 }
@@ -57,7 +57,8 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    justify-content: flex-end;
+    
+    min-height: 0;
 }
 
 .liste-messages::-webkit-scrollbar {
@@ -67,4 +68,56 @@
 .liste-messages::-webkit-scrollbar-thumb {
     background-color: #2a2a2a;
     border-radius: 10px;
+}
+
+/* Le header avec nom du groupe + bouton ajouter membre  */
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 16px 20px;
+    border-bottom: 1px solid #2a2a2a;
+    background-color: #0e0e0e;
+}
+
+.chat-header h2 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.chat-header button {
+    position: absolute;
+    right: 20px;
+    background-color: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 8px 14px;
+    color: #5288c1;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chat-header button:hover {
+    background-color: #5288c1;
+    color: #ffffff;
+    border-color: #5288c1;
+}
+
+/* Quand y'a rien petit sleep  */
+
+.sleep {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 2rem;
+    color: #1e1e1e;
+    letter-spacing: 4px;
+    user-select: none;
 }
