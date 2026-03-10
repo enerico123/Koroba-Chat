@@ -4,14 +4,18 @@ const db = require('../database')
 
 // GET /messages/:conversationId -> liste les messages 
 
-router.get('/:conversationId',(req,res) => {
-    const conversationId = req.params.conversationId 
+router.get('/:conversationId', (req, res) => {
+  const conversationId = req.params.conversationId
 
-    db.all('SELECT * FROM messages WHERE conversation_id = ? ',[conversationId],(err,messages) => {
-        if (err) return res.status(500).json({ error: 'Erreur serveur' })
-        res.json(messages)
-    })
-
+  db.all(`
+    SELECT messages.*, users.username 
+    FROM messages 
+    JOIN users ON messages.sender_id = users.id
+    WHERE messages.conversation_id = ?
+  `, [conversationId], (err, messages) => {
+    if (err) return res.status(500).json({ error: 'Erreur serveur' })
+    res.json(messages)
+  })
 })
 
 // POST /messages -> envoyer un message dans une conversation 

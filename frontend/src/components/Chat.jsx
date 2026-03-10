@@ -8,6 +8,7 @@ const Chat = ({token, userId, conversationId}) => {
   const [messages, setMessages] = useState([])
   const [contenu, setContenu] = useState('')
   const socket = useRef(null)
+  const messagesEndRef = useRef(null)
 
   // charge les messags quand convId change
   useEffect(() => {
@@ -64,6 +65,11 @@ const Chat = ({token, userId, conversationId}) => {
     setContenu('')  // vider l'input après envoi
   }
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+
     return (
       <>
       {/* liste des messages  */}
@@ -72,6 +78,7 @@ const Chat = ({token, userId, conversationId}) => {
       {messages.map((mess) => (
         <Message key={mess.id} message={mess} userId={userId} />
       ))}
+      <div ref={messagesEndRef} /> 
       </div>
 
       {/* input pour ecrire un message  */}
