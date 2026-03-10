@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Chat from './components/Chat'
 import Sidebar from './components/Sidebar'
+import './App.css'
 
 function App() {
   const [token, setToken] = useState(null)

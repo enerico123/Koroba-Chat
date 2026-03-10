@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { io } from 'socket.io-client'
+import Message from "./Message"
 
 const Chat = ({token, userId, conversationId}) => {
 
@@ -67,9 +68,7 @@ const Chat = ({token, userId, conversationId}) => {
       {/* liste des messages  */}
       
       {messages.map((mess) => (
-        <div key={mess.id}>
-          {mess.content}
-        </div>
+        <Message key={mess.id} message={mess} userId={userId} />
       ))}
 
       {/* input pour ecrire un message  */}
