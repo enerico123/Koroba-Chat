@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import { io } from 'socket.io-client'
+import Message from "./Message"
+import './Chat.css'
 
 const Chat = ({token, userId, conversationId}) => {
 
@@ -65,20 +67,22 @@ const Chat = ({token, userId, conversationId}) => {
     return (
       <>
       {/* liste des messages  */}
-      
+
+      <div className="liste-messages">
       {messages.map((mess) => (
-        <div key={mess.id}>
-          {mess.content}
-        </div>
+        <Message key={mess.id} message={mess} userId={userId} />
       ))}
+      </div>
 
       {/* input pour ecrire un message  */}
+      <div className="input-message">
       <input 
         type="text" 
         value={contenu}
         onChange={(e) => setContenu(e.target.value)}
         placeholder="Écrire un message..."/>
       <button onClick={envoyerMessage}>Envoyer</button>
+      </div>
       </>
     )
   }

@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Chat from './components/Chat'
 import Sidebar from './components/Sidebar'
+import './App.css'
 
 function App() {
   const [token, setToken] = useState(null)
@@ -30,10 +31,14 @@ function App() {
   
 
   return (
-    <div>
-      <Sidebar token={token} onSelectConversation={(id) => setConversationId(id)}/>
-
-      <Chat token={token} userId={userId} conversationId={conversationId}/>
+    <div className="app-container">
+      <div className='sidebar'>
+        <Sidebar token={token} onSelectConversation={(id) => setConversationId(id)}/>
+      </div>
+      
+      <div className='chat'>
+        <Chat token={token} userId={userId} conversationId={conversationId}/>
+      </div>
     </div>
   ) 
   

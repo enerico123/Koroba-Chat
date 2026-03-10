@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 500px 1fr;
+  height: 100vh;
+}
+
+.sidebar {
+    background-color: rgb(49, 49, 49);
+}
