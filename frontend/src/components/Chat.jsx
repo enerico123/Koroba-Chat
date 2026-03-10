@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
+import { io } from 'socket.io-client'
 
 const Chat = ({token, userId, conversationId}) => {
 
   const [messages, setMessages] = useState([])
+  const [contenu, setContenu] = useState('')
+  const socket = useRef(null)
 
+  // charge les messags quand convId change
   useEffect(() => {
+    if (!conversationId) return
     const chargerMessages = async () => {
             const response = await fetch(`/api/messages/${conversationId}`, {
             headers: { 
@@ -17,6 +22,68 @@ const Chat = ({token, userId, conversationId}) => {
         chargerMessages()
   },[conversationId])
 
+
+  // // connexion socket une fois quand la page se charge
+  // useEffect(() => {
+  // // connexion perma 
+  // socket.current = io('http://localhost:3000', {
+  //   auth: { token }
+  // })
+  // // se connecte a la room / le canal 
+  // socket.current.on('connect', () => {
+  //   socket.current.emit('join_conversation', conversationId)
+  // })
+  // // ecouter les messages 
+  // socket.current.on('new_message', (message) => {
+  //   if (message.conversationId === conversationId) {
+  //   setMessages(prev => [...prev, message])
+  //   }
+  // })
+
+  //   return () => socket.current.disconnect() // nettoyage quand on quitte
+  // }, [conversationId])
+
+  // Connexion socket — une seule fois
+
+
+useEffect(() => {
+  // connexion perma 
+  socket.current = io('http://localhost:3000', { auth: { token } })
+
+
+  // ecouter les messages
+  socket.current.on('new_message', (message) => {
+    setMessages(prev => [...prev, message])
+  })
+
+  return () => socket.current.disconnect()
+}, [])  // ← une seule fois
+
+// Rejoindre la room — quand conversationId change
+useEffect(() => {
+  if (!conversationId || !socket.current) return
+  socket.current.emit('join_conversation', conversationId)
+}, [conversationId])  // ← quand conv change
+
+
+
+
+
+  // fonction pour ENVOYER son message 
+  const envoyerMessage = () => {
+  if (!contenu) return  
+
+  socket.current.emit('send_message', {
+    conversationId,
+    content: contenu
+  })
+
+
+
+
+  setContenu('')  // vider l'input après envoi
+}
+
   return (
     <>
     {/* liste des messages  */}
@@ -28,7 +95,12 @@ const Chat = ({token, userId, conversationId}) => {
     ))}
 
     {/* input pour ecrire un message  */}
-    <input type="text" />
+    <input 
+      type="text" 
+      value={contenu}
+      onChange={(e) => setContenu(e.target.value)}
+      placeholder="Écrire un message..."/>
+    <button onClick={envoyerMessage}>Envoyer</button>
     </>
   )
 }
