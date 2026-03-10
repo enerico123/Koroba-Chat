@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Login from './components/Login'
 import Register from './components/Register'
 import Chat from './components/Chat'
@@ -10,11 +10,19 @@ function App() {
   const [userId, setUserId] = useState(localStorage.getItem('userId'))
   const [conversation, setConversation] = useState(null)
   const [isRegister, setIsRegister] = useState(false)
+  const [username, setUsername] = useState(null)
   
-  // console.log('conversation:', conversation)
+  useEffect(() => {
+    if (!token || !userId) return
+    
+    fetch(`/api/users/${userId}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => setUsername(data.username))
+  }, [userId])
 
   if (!token) {
-    
     if(isRegister){
       return <Register onRegister={(token, userId) => {
       setToken(token)
@@ -34,12 +42,24 @@ function App() {
     onSwitch={() => setIsRegister(true)}  />}
   }
 
+  const deconnexion = () => {
+    setToken(null)
+    setUserId(null)
+    setUsername(null)
+    setConversation(null)
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+  }
   
 
   return (
     <div className="app-container">
       <div className='sidebar'>
-        <Sidebar token={token} onSelectConversation={(conv) => setConversation(conv)}/>
+        <Sidebar 
+        token={token} 
+        username={username}
+        onSelectConversation={(conv) => setConversation(conv)}
+        onDeconnexion={deconnexion}/>
       </div>
       
       <div className='chat'>
