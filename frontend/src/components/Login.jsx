@@ -36,12 +36,16 @@ function Login({ onLogin }) {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
+      <br></br>
+      <br></br>
       <input
         type="password"
         placeholder="Mot de passe"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      <br></br>
+      <br></br>
       {error && <p>{error}</p>}
       <button onClick={handleLogin}>Se connecter</button>
     </div>
