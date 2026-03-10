@@ -1,10 +1,10 @@
-
+import './Message.css'
 
 function Message({ message, userId }) {
   const estMoi = message.sender_id === userId
 
   return (
-    <div>
+    <div className={estMoi ? "msg moi" : "msg autre"}>
       {message.content}
     </div>
   )
