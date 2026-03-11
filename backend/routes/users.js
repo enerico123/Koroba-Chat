@@ -4,10 +4,19 @@ const db = require('../database')
 
 // GET /users — liste de tous les users
 router.get('/', (req, res) => {
-  db.all('SELECT id, username, email, created_at, is_online FROM users', [], (err, users) => {
-    if (err) return res.status(500).json({ error: 'Erreur serveur' })
-    res.json(users)
-  })
+  const search = req.query.search
+
+  if (!search) return res.json([])
+
+  db.get(
+    'SELECT id, username FROM users WHERE LOWER(username) = LOWER(?)',
+    [search],
+    (err, user) => {
+      if (err) return res.status(500).json({ error: 'Erreur serveur' })
+      if (!user) return res.json(null)  // user pas trouvé
+      res.json(user)
+    }
+  )
 })
 
 // GET /users/:id — profil d'un user

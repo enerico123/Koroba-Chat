@@ -23,6 +23,8 @@ const initSocket = (server) => {
   })
   // Partie 3 : connexion permanante 
   io.on('connection', (socket) => {
+    // Rejoindre sa room personnelle
+    socket.join(`user_${socket.user.id}`)
     console.log(`${socket.user.username} connecté `)
 
     // Partie 4 : Rejoindre conversation : connexion permanante pour les requetes de conv 
@@ -61,6 +63,7 @@ const initSocket = (server) => {
       console.log(`${socket.user.username} déconnecté 🔴`)
     })
   })
+  return io
 }
 
 module.exports = initSocket

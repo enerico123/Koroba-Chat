@@ -1,24 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { LogOut, User } from 'lucide-react'
+import { io } from 'socket.io-client'
 import './Sidebar.css'
 
 const Sidebar = ({token, onSelectConversation,username, onDeconnexion}) => {
 
     const [conversations, setConversations] = useState([])
     const [newNameConv,setNewNameConv] = useState('')
+    const socket = useRef(null)
+
+    const chargerConversations = async () => {
+        const response = await fetch('/api/conversations', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        const data = await response.json()
+        setConversations(data)
+    }
 
     useEffect(() => {
-        const chargerConversations = async () => {
-            const response = await fetch('/api/conversations', {
-            headers: { 
-                'Authorization': `Bearer ${token}` 
-            }
-            })
-            const data = await response.json()
-            setConversations(data)
-        }
         chargerConversations()
-        }, [])
+    }, [])
+
+    useEffect(() => {
+        socket.current = io('http://localhost:3000', { auth: { token } })
+
+        socket.current.on('added_to_conversation', () => {
+            chargerConversations()  // recharge les convs
+        })
+
+        return () => socket.current.disconnect()
+    }, [])
 
     const creerGroupe = async () => {
         if (!newNameConv) return
