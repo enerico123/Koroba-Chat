@@ -46,13 +46,24 @@ router.post('/', (req, res) => {
 router.post('/:id/members', (req, res) => {
   const conversationId = req.params.id
   const { userId } = req.body
+  const io = req.app.get('io')
 
-  db.run(
-    'INSERT INTO conversation_members (conversation_id, user_id) VALUES (?, ?)',
+  // Vérifier si déjà membre
+  db.get(
+    'SELECT * FROM conversation_members WHERE conversation_id = ? AND user_id = ?',
     [conversationId, userId],
-    function(err) {
-      if (err) return res.status(500).json({ error: 'Erreur serveur' })
-      res.status(201).json({ message: 'Membre ajouté ✅' })
+    (err, existing) => {
+      if (existing) return res.status(400).json({ error: 'Déjà membre du groupe' })
+
+      db.run(
+        'INSERT INTO conversation_members (conversation_id, user_id) VALUES (?, ?)',
+        [conversationId, userId],
+        function(err) {
+          if (err) return res.status(500).json({ error: 'Erreur serveur' })
+          io.to(`user_${userId}`).emit('added_to_conversation', { conversationId })
+          res.status(201).json({ message: 'Membre ajouté ✅' })
+        }
+      )
     }
   )
 })

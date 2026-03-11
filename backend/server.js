@@ -16,6 +16,8 @@ const PORT = 3000
 app.use(cors())
 app.use(express.json())
 
+
+
 // Route de test
 app.get('/', (req, res) => {
   res.json({ message: 'Serveur Koroba-Chat opérationnel' })
@@ -32,9 +34,11 @@ app.use('/conversations',authMiddleware,conversationsRoutes)
 // Routes messages
 app.use('/messages',authMiddleware,messagesRoutes)
 
-// Lancer le serveur avec WebSocket 
+// Lancer le serveur avec WebSocket + Rend io accessible dans les routes
 const server = http.createServer(app)
-initSocket(server)
+const io = initSocket(server)
+app.set('io', io)
+
 
 server.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`)
