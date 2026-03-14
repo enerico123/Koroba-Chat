@@ -162,6 +162,9 @@ const Chat = ({fetchAvecAuth, token, userId, conversationId, nomConversation}) =
           type="text" 
           value={contenu}
           onChange={(e) => setContenu(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") envoyerMessage()
+          }}
           placeholder="Écrire un message..."/>
         <button onClick={envoyerMessage}>Envoyer</button>
         </div>
