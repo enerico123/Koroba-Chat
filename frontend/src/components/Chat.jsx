@@ -3,7 +3,7 @@ import { io } from 'socket.io-client'
 import Message from "./Message"
 import './Chat.css'
 
-const Chat = ({token, userId, conversationId, nomConversation}) => {
+const Chat = ({fetchAvecAuth, token, userId, conversationId, nomConversation}) => {
 
   const [messages, setMessages] = useState([])
   const [contenu, setContenu] = useState('')
@@ -19,11 +19,7 @@ const Chat = ({token, userId, conversationId, nomConversation}) => {
   useEffect(() => {
     if (!conversationId) return
     const chargerMessages = async () => {
-            const response = await fetch(`/api/messages/${conversationId}`, {
-            headers: { 
-                'Authorization': `Bearer ${token}` 
-            }
-            })
+            const response = await fetchAvecAuth(`/api/messages/${conversationId}`)
             const data = await response.json()
             setMessages(data)
         }
@@ -57,9 +53,7 @@ const Chat = ({token, userId, conversationId, nomConversation}) => {
       console.log('cherche:', searchUsername)
       if (!searchUsername) return
       
-      const response = await fetch(`/api/users?search=${searchUsername}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await fetchAvecAuth(`/api/users?search=${searchUsername}`)
       const data = await response.json()
       console.log('data :', {data})
       setUserTrouve(data)
@@ -70,19 +64,16 @@ const Chat = ({token, userId, conversationId, nomConversation}) => {
     const ajouterMembre = async () => {
       if (!userTrouve) return
 
-      const response = await fetch(`/api/conversations/${conversationId}/members`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId: userTrouve.id })
+      const response = await fetchAvecAuth(`/api/conversations/${conversationId}/members`, {
+        method: 'POST',                          
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: userTrouve.id })  
       })
 
       const data = await response.json()
-      console.log(data)
-      setShowModal(false)  // ferme la modal
-      setSearchUsername('') // remet à zéro
+      //console.log(data)
+      setShowModal(false) 
+      setSearchUsername('')
       setUserTrouve(null)
     }
 

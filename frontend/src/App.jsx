@@ -22,6 +22,35 @@ function App() {
     .then(data => setUsername(data.username))
   }, [userId])
 
+  
+
+  const deconnexion = () => {
+    setToken(null)
+    setUserId(null)
+    setUsername(null)
+    setConversation(null)
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+  }
+
+  // Fetch qui déconnecte automatiquement si 401
+  const fetchAvecAuth = async (url, options = {}) => {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    
+    if (response.status === 401) {
+      deconnexion()  // ← renvoie au login automatiquement
+      return null
+    }
+    
+    return response
+  }
+  
   if (!token) {
     if(isRegister){
       return <Register onRegister={(token, userId) => {
@@ -42,21 +71,12 @@ function App() {
     onSwitch={() => setIsRegister(true)}  />}
   }
 
-  const deconnexion = () => {
-    setToken(null)
-    setUserId(null)
-    setUsername(null)
-    setConversation(null)
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
-  }
-  
-
   return (
     <div className="app-container">
       <div className='sidebar'>
         <Sidebar 
-        token={token} 
+        fetchAvecAuth={fetchAvecAuth} 
+        token={token}
         username={username}
         onSelectConversation={(conv) => setConversation(conv)}
         onDeconnexion={deconnexion}/>
@@ -64,7 +84,8 @@ function App() {
       
       <div className='chat'>
         <Chat 
-        token={token} 
+        fetchAvecAuth={fetchAvecAuth}
+        token={token}
         userId={userId} 
         conversationId={conversation?.id} 
         nomConversation={conversation?.name}/>

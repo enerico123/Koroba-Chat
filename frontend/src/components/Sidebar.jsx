@@ -3,18 +3,19 @@ import { LogOut, User } from 'lucide-react'
 import { io } from 'socket.io-client'
 import './Sidebar.css'
 
-const Sidebar = ({token, onSelectConversation,username, onDeconnexion}) => {
+const Sidebar = ({fetchAvecAuth,token, onSelectConversation,username, onDeconnexion}) => {
 
     const [conversations, setConversations] = useState([])
     const [newNameConv,setNewNameConv] = useState('')
     const socket = useRef(null)
 
     const chargerConversations = async () => {
-        const response = await fetch('/api/conversations', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        })
+        const response = await fetchAvecAuth('/api/conversations')
+        if (!response) return
         const data = await response.json()
-        setConversations(data)
+        if (Array.isArray(data)) {
+            setConversations(data)
+        }
     }
 
     useEffect(() => {
@@ -33,7 +34,7 @@ const Sidebar = ({token, onSelectConversation,username, onDeconnexion}) => {
 
     const creerGroupe = async () => {
         if (!newNameConv) return
-        const response = await fetch('/api/conversations', {
+        const response = await fetchAvecAuth('/api/conversations', {
             method: 'POST',
             headers: {
             'Authorization': `Bearer ${token}`,
