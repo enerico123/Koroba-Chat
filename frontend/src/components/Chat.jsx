@@ -36,11 +36,13 @@ const Chat = ({fetchAvecAuth, token, userId, conversationId, nomConversation}) =
 
     // ecouter les messages
     socket.current.on('new_message', (message) => {
-      setMessages(prev => [...prev, message])
+      if (message.conversationId === conversationId){
+        setMessages(prev => [...prev, message])
+      }
     })
 
     return () => socket.current.disconnect()
-  }, [])  // ← une seule fois
+  }, [conversationId])
 
   // Rejoindre la room — quand conversationId change
   useEffect(() => {
